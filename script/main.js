@@ -8,7 +8,7 @@ const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.inner
 camera.position.set( 0, 5, 5 );
 
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize( 500, 500 );
+renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setPixelRatio = window.devicePixelRatio;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -34,7 +34,7 @@ threeGroup.add( plane );
 // cube.position.y = 1;
 // scene.add( cube );
 
-var cube = new Cube(0, 1, 0, 1, new THREE.MeshStandardMaterial( {color: 0x888888} ));
+var cube = new Cube(0, 1, 0, 1, new THREE.MeshNormalMaterial());
 threeGroup.add( cube.obj );
 
 // Make the user rotate the cube by pressing the arrow keys
@@ -58,6 +58,18 @@ document.addEventListener('keydown', function(event) {
 		case 'KeyE':
 		rotateCube('z', -1);
 		break;
+		case "KeyArrowLeft": // Left
+		moveCube('x', -1);
+		break;
+		case 'KeyArrowUp': // Up
+		moveCube('z', -1);
+		break;
+		case 'KeyArrowRight': // Right
+		moveCube('x', 1);
+		break;
+		case 'KeyArrowDown': // Down
+		moveCube('z', 1);
+		break;
 	}
 });
 
@@ -74,6 +86,9 @@ directionalLight.shadow.camera.near = 0.1;
 directionalLight.shadow.camera.far = 40;
 scene.add( directionalLight );
 
+// Add a global light that illuminates the whole scene
+const ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 );
+scene.add( ambientLight );
 
 
 
@@ -106,6 +121,19 @@ function rotateCube(axis, sign) {
 		cube.obj.rotation[axis] += Math.PI / 180 * sign;
 		angle += Math.PI / 180;
 		if (angle >= Math.PI / 2) {
+			clearInterval(interval);
+		}
+	}, 10);
+
+}
+
+// Function that smoothly moves the cube by 1 unit in the x or y direction
+function moveCube(axis, sign) {
+	var distance = 0;
+	var interval = setInterval(function() {
+		cube.obj.position[axis] += 1 * sign;
+		distance += 1;
+		if (distance >= 1) {
 			clearInterval(interval);
 		}
 	}, 10);
