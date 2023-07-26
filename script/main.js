@@ -5,6 +5,7 @@ import { Cube } from './cube.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+camera.position.set( 0, 5, 5 );
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( 500, 500 );
@@ -38,18 +39,24 @@ threeGroup.add( cube.obj );
 
 // Make the user rotate the cube by pressing the arrow keys
 document.addEventListener('keydown', function(event) {
-	switch (event.keyCode) {
-		case 37: // Left
-		cube.obj.rotation.y += 0.1;
+	switch (event.code) {
+		case "KeyA": // Left
+		rotateCube('y', 1);
 		break;
-		case 38: // Up
-		cube.obj.rotation.x += 0.1;
+		case 'KeyW': // Up
+		rotateCube('x', 1);
 		break;
-		case 39: // Right
-		cube.obj.rotation.y -= 0.1;
+		case 'KeyD': // Right
+		rotateCube('y', -1);
 		break;
-		case 40: // Down
-		cube.obj.rotation.x -= 0.1;
+		case 'KeyS': // Down
+		rotateCube('x', -1);
+		break;
+		case 'KeyQ':
+		rotateCube('z', 1);
+		break;
+		case 'KeyE':
+		rotateCube('z', -1);
 		break;
 	}
 });
@@ -91,3 +98,15 @@ function animate() {
 }
 
 animate();
+
+// Function that smoothly rotates the cube by 90 degrees in the x or y direction
+function rotateCube(axis, sign) {
+	var angle = 0;
+	var interval = setInterval(function() {
+		cube.obj.rotation[axis] += Math.PI / 180 * sign;
+		angle += Math.PI / 180;
+		if (angle >= Math.PI / 2) {
+			clearInterval(interval);
+		}
+	}, 10);
+}
