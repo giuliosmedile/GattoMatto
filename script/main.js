@@ -2,13 +2,14 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'glTF';
 import { Cube } from './cube.js';
+import { Plane } from './plane.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.set( 0, 5, 5 );
 
 const renderer = new THREE.WebGLRenderer({antialias: true});
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setSize( window.innerWidth - 100, window.innerHeight - 100);
 renderer.setPixelRatio = window.devicePixelRatio;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -20,11 +21,15 @@ const loader = new GLTFLoader();
 var threeGroup = new THREE.Group();
 
 // Add a white plane
-var planeGeometry = new THREE.PlaneGeometry( 10, 10 );
-const planeMaterial = new THREE.MeshStandardMaterial( {color: 0xffffff, side: THREE.DoubleSide} );
-const plane = new THREE.Mesh( planeGeometry, planeMaterial );
-plane.rotation.x = Math.PI / 2;
-threeGroup.add( plane );
+// var planeGeometry = new THREE.PlaneGeometry( 10, 10 );
+// const planeMaterial = new THREE.MeshStandardMaterial( {color: 0xffffff, side: THREE.DoubleSide} );
+// const plane = new THREE.Mesh( planeGeometry, planeMaterial );
+// plane.rotation.x = Math.PI / 2;
+// threeGroup.add( plane );
+
+var plane = new Plane(0, 0, 0, 10, new THREE.MeshStandardMaterial( {color: 0xffffff, side: THREE.DoubleSide} ), 5);
+
+threeGroup.add( plane.planeGroup );
 
 
 // Add a grey cube at y=1
@@ -58,16 +63,16 @@ document.addEventListener('keydown', function(event) {
 		case 'KeyE':
 		rotateCube('z', -1);
 		break;
-		case "KeyArrowLeft": // Left
+		case "ArrowLeft": // Left
 		moveCube('x', -1);
 		break;
-		case 'KeyArrowUp': // Up
+		case 'ArrowUp': // Up
 		moveCube('z', -1);
 		break;
-		case 'KeyArrowRight': // Right
+		case 'ArrowRight': // Right
 		moveCube('x', 1);
 		break;
-		case 'KeyArrowDown': // Down
+		case 'ArrowDown': // Down
 		moveCube('z', 1);
 		break;
 	}
@@ -100,7 +105,7 @@ threeGroup.traverse( function (object) {
 	}
 }
 );
-plane.castShadow = false;
+plane.obj.castShadow = false;
 scene.add( threeGroup );
 
 
@@ -127,14 +132,15 @@ function rotateCube(axis, sign) {
 
 }
 
-// Function that smoothly moves the cube by 1 unit in the x or y direction
+// Function that smoothly translates the cube by 1 unit in the x or y direction
 function moveCube(axis, sign) {
 	var distance = 0;
 	var interval = setInterval(function() {
-		cube.obj.position[axis] += 1 * sign;
-		distance += 1;
+		cube.obj.position[axis] += sign * 0.01;
+		distance += 0.01;
 		if (distance >= 1) {
 			clearInterval(interval);
 		}
 	}, 10);
+
 }
