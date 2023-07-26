@@ -55,13 +55,19 @@ document.addEventListener('keydown', function(event) {
 });
 
 
-const light = new THREE.AmbientLight( 0x404040, 10 ); // soft white light
-light.castShadow = true;
-light.shadow.mapSize.width = 2048;
-light.shadow.mapSize.height = 2048;
-light.shadow.camera.near = 0.5;
-light.shadow.camera.far = 500;
-scene.add( light );
+// Add a directional light that casts shadows
+const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+directionalLight.position.set( 0, 10, 0 );
+directionalLight.castShadow = true;
+directionalLight.shadow.camera.top = 10;
+directionalLight.shadow.camera.bottom = - 10;
+directionalLight.shadow.camera.left = - 10;
+directionalLight.shadow.camera.right = 10;
+directionalLight.shadow.camera.near = 0.1;
+directionalLight.shadow.camera.far = 40;
+scene.add( directionalLight );
+
+
 
 
 
@@ -72,6 +78,7 @@ threeGroup.traverse( function (object) {
 	}
 }
 );
+plane.castShadow = false;
 scene.add( threeGroup );
 
 
