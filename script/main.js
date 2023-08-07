@@ -1,12 +1,14 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'glTF';
-import { Cube } from './cube.js';
+import { Cubes } from './cubes.js';
 import { Plane } from './plane.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.set( 0, 5, 5 );
+camera.lookAt(new THREE.Vector3(0, 60, 0));
+
 
 const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize( window.innerWidth - 100, window.innerHeight - 100);
@@ -20,33 +22,23 @@ const loader = new GLTFLoader();
 
 var threeGroup = new THREE.Group();
 
-// Add a white plane
-// var planeGeometry = new THREE.PlaneGeometry( 10, 10 );
-// const planeMaterial = new THREE.MeshStandardMaterial( {color: 0xffffff, side: THREE.DoubleSide} );
-// const plane = new THREE.Mesh( planeGeometry, planeMaterial );
-// plane.rotation.x = Math.PI / 2;
-// threeGroup.add( plane );
-
 var plane = new Plane(0, 0, 0, 10, new THREE.MeshStandardMaterial( {color: 0xffffff, side: THREE.DoubleSide} ), 5);
 
 threeGroup.add( plane.planeGroup );
 
 
-// Add a grey cube at y=1
-// const cubeGeometry = new THREE.BoxGeometry( 1, 1, 1 );
-// const cubeMaterial = new THREE.MeshBasicMaterial( {color: 0x888888} );
-// const cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
-// cube.position.y = 1;
-// scene.add( cube );
+// var cube = new Cube(0, 1, 0, 1, new THREE.MeshNormalMaterial());
 
-var cube = new Cube(0, 1, 0, 1, new THREE.MeshNormalMaterial());
-threeGroup.add( cube.obj );
+var pieceCyan = new Cubes("pieceCyan");
+threeGroup.add( pieceCyan.group );
+
+// threeGroup.add( cube.obj );
 
 // Make the user rotate the cube by pressing the arrow keys
 document.addEventListener('keydown', function(event) {
 	switch (event.code) {
 		case "KeyA": // Left
-		rotateCube('y', 1);
+		rotateCube('y', 1, pieceCyan.group);
 		break;
 		case 'KeyW': // Up
 		rotateCube('x', 1);
@@ -120,10 +112,10 @@ function animate() {
 animate();
 
 // Function that smoothly rotates the cube by 90 degrees in the x or y direction
-function rotateCube(axis, sign) {
+function rotateCube(axis, sign, target) {
 	var angle = 0;
 	var interval = setInterval(function() {
-		cube.obj.rotation[axis] += Math.PI / 180 * sign;
+		target.rotation[axis] += Math.PI / 180 * sign;
 		angle += Math.PI / 180;
 		if (angle >= Math.PI / 2) {
 			clearInterval(interval);
@@ -136,7 +128,7 @@ function rotateCube(axis, sign) {
 function moveCube(axis, sign) {
 	var distance = 0;
 	var interval = setInterval(function() {
-		cube.obj.position[axis] += sign * 0.01;
+		target.obj.position[axis] += sign * 0.01;
 		distance += 0.01;
 		if (distance >= 1) {
 			clearInterval(interval);
