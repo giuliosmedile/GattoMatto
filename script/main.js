@@ -26,19 +26,48 @@ var plane = new Plane(0, 0, 0, 10, new THREE.MeshStandardMaterial( {color: 0xfff
 
 threeGroup.add( plane.planeGroup );
 
+// var pieceCiano = new Cubes("pieceCiano");
+// threeGroup.add( pieceCiano.group );
 
-// var cube = new Cube(0, 1, 0, 1, new THREE.MeshNormalMaterial());
+// var pieceAzzurro = new Cubes("pieceAzzurro");
+// threeGroup.add( pieceAzzurro.group );
 
-var pieceCyan = new Cubes("pieceCyan");
-threeGroup.add( pieceCyan.group );
+// var pieceBlu = new Cubes("pieceBlu");
+// threeGroup.add( pieceBlu.group );
 
-// threeGroup.add( cube.obj );
+// var pieceCeleste = new Cubes("pieceCeleste");
+// threeGroup.add( pieceCeleste.group );
+
+// var pieceMagenta = new Cubes("pieceMagenta");
+// threeGroup.add( pieceMagenta.group );
+
+// var pieceRosa = new Cubes("pieceRosa");
+// threeGroup.add( pieceRosa.group );
+
+// var pieceFucsia = new Cubes("pieceFucsia");
+// threeGroup.add( pieceFucsia.group );
+
+// var pieceBianco = new Cubes("pieceBianco");
+// threeGroup.add( pieceBianco.group );
+
+// var pieceNero = new Cubes("pieceNero");
+// threeGroup.add( pieceNero.group );
+
+// var pieceGiallo = new Cubes("pieceGiallo");
+// threeGroup.add( pieceGiallo.group );
+
+// var pieceVerdino = new Cubes("pieceVerdino");
+// threeGroup.add( pieceVerdino.group );
+
+var pieceVerde = new Cubes("pieceVerde");
+threeGroup.add( pieceVerde.group );
+
 
 // Make the user rotate the cube by pressing the arrow keys
 document.addEventListener('keydown', function(event) {
 	switch (event.code) {
 		case "KeyA": // Left
-		rotateCube('y', 1, pieceCyan.group);
+		rotateCube('y', 1, pieceFucsia.group);
 		break;
 		case 'KeyW': // Up
 		rotateCube('x', 1);
